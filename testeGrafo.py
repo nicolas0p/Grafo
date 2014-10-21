@@ -13,9 +13,16 @@ class TesteGrafo(unittest.TestCase):
         self.assertEqual(self.grafo.ordem(), 1)
 
     def teste_remover_vertice_diminui_tamanho(self):
-        self.grafo.adicionar_vertice(Vertice('a'))
-        self.grafo.remover_vertice('a')
+        a = Vertice('a')
+        self.grafo.adicionar_vertice(a)
+        self.grafo.remover_vertice(a)
         self.assertEqual(self.grafo.ordem(), 0)
+
+    def teste_conectar_dois_vertices(self):
+        a = Vertice('a')
+        b = Vertice('b')
+        self.grafo.conectar(a,b)
+        assertTrue(self.grafo.estao_conectados(a,b))
 
 if __name__ == '__main__':
     unittest.main()
