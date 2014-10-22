@@ -3,7 +3,7 @@ import unittest
 from grafo import Grafo
 from grafo import Vertice
 
-class TesteGrafo(unittest.TestCase):
+class GrafoTeste(unittest.TestCase):
 
     def setUp(self):
         self.grafo = Grafo()
@@ -21,8 +21,10 @@ class TesteGrafo(unittest.TestCase):
     def teste_conectar_dois_vertices(self):
         a = Vertice('a')
         b = Vertice('b')
+        self.grafo.adicionar_vertice(a)
+        self.grafo.adicionar_vertice(b)
         self.grafo.conectar(a,b)
-        assertTrue(self.grafo.estao_conectados(a,b))
+        self.assertTrue(self.grafo.estao_conectados(a,b))
 
 if __name__ == '__main__':
     unittest.main()
