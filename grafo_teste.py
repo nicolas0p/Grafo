@@ -80,13 +80,11 @@ class GrafoTeste(unittest.TestCase):
         self.assertFalse(self.grafo.eRegular())
 
     def teste_e_regular(self):
-        grafoRegular = Grafo()
-        a = Vertice('a')
-        b = Vertice('b')
-        c = Vertice('c')
-        grafoRegular._vertices = {'a':a,'b':b,'c':c}
-        grafoRegular._arestas = {'a':{b,c}, 'b':{a,c}, 'c':{a,b}}
-        self.assertTrue(grafoRegular.eRegular())
+        conj = self.adicionar_vertices()
+        self.grafo.conectar(conj['a'], conj['b'])
+        self.grafo.conectar(conj['a'], conj['c'])
+        self.grafo.conectar(conj['b'], conj['c'])
+        self.assertTrue(self.grafo.eRegular())
 
 if __name__ == '__main__':
     unittest.main()
