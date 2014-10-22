@@ -26,32 +26,5 @@ class GrafoTeste(unittest.TestCase):
         self.grafo.conectar(a,b)
         self.assertTrue(self.grafo.estao_conectados(a,b))
 
-    def teste_desconectar_dois_vertice(self):
-        a = Vertice('a')
-        b = Vertice('b')
-        self.grafo.adicionar_vertice(a)
-        self.grafo.adicionar_vertice(b)
-        self.grafo.conectar(a,b)
-        self.grafo.desconectar(a,b)
-        self.assertFalse(self.grafo.estao_conectados(a,b))
-
-    def teste_ordem(self):
-        a = Vertice('a')
-        b = Vertice('b')
-        c = Vertice('c')
-        conj = {a,b,c}
-        for vertice in conj:
-            self.grafo.adicionar_vertice(vertice)
-        self.assertEqual(self.grafo.ordem(),3)
-
-    def teste_obter_vertice(self):
-        a = Vertice('a')
-        b = Vertice('b')
-        c = Vertice('c')
-        conj = {'a':a,'b':b,'c':c}
-        for key in conj:
-            self.grafo.adicionar_vertice(conj[key])
-        self.assertDictEqual(self.grafo.vertices(), conj)
-
 if __name__ == '__main__':
     unittest.main()
