@@ -1,12 +1,13 @@
 import unittest
 
-from grafo import Grafo
+from grafo import Graph
 from grafo import Vertice
+from grafo import CannotRelateToYourselfException
 
 class GrafoTeste(unittest.TestCase):
 
     def setUp(self):
-        self.grafo = Grafo()
+        self.grafo = Graph()
 
     def adicionar_vertices(self):
         a = Vertice('a')
@@ -26,6 +27,11 @@ class GrafoTeste(unittest.TestCase):
         self.grafo.adicionar_vertice(a)
         self.grafo.remover_vertice(a)
         self.assertEqual(self.grafo.ordem(), 0)
+
+    def teste_vertice_nao_pode_ser_conectado_com_ele_mesmo(self):
+        a = Vertice('a')
+        self.grafo.adicionar_vertice(a)
+        self.assertRaises(CannotRelateToYourselfException, self.grafo.conectar, a,a)
 
     def teste_remover_vertice_remove_arestas_conectadas_nele(self):
         conj = self.adicionar_vertices()
@@ -70,7 +76,7 @@ class GrafoTeste(unittest.TestCase):
         self.assertEqual(self.grafo.grau(a), 2)
 
     def teste_grafo_vazio_nao_e_regular(self):
-        grafo = Grafo()
+        grafo = Graph()
         self.assertFalse(grafo.eRegular())
 
     def teste_nao_regular(self):
@@ -85,6 +91,23 @@ class GrafoTeste(unittest.TestCase):
         self.grafo.conectar(conj['a'], conj['c'])
         self.grafo.conectar(conj['b'], conj['c'])
         self.assertTrue(self.grafo.eRegular())
+
+    def teste_e_completo(self):
+        conj = self.adicionar_vertices()
+        for v1 in conj:
+            for v2 in conj:
+                if v1 != v2:
+                    self.grafo.conectar(conj[v1], conj[v2])
+        self.assertTrue(self.grafo.eCompleto())
+
+    def teste_nao_completo(self):
+        conj = self.adicionar_vertices()
+        for v1 in conj:
+            for v2 in conj:
+                if v1 != v2:
+                    self.grafo.conectar(conj[v1], conj[v2])
+        self.grafo.desconectar(conj['a'], conj['b'])
+        self.assertFalse(self.grafo.eCompleto())
 
 if __name__ == '__main__':
     unittest.main()

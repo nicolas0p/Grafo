@@ -1,7 +1,7 @@
 
 #vertices e um dict{nome:Vertice}
 #arestas e um dict{nome vertice:set<Vertice>} que representa que existe uma aresta entre v1 e todos os vertices da lista
-class Grafo:
+class Graph:
 
     def __init__(self):
         self._vertices = {}
@@ -22,6 +22,8 @@ class Grafo:
         return len(self._vertices)
 
     def conectar(self, vertice1, vertice2):
+        if vertice1.nome == vertice2.nome:
+            raise CannotRelateToYourselfException()
         adjacentes_v1 = self._arestas[vertice1.nome]
         adjacentes_v2 = self._arestas[vertice2.nome]
         adjacentes_v1.add(vertice2)
@@ -60,7 +62,13 @@ class Grafo:
         vertice1 = self.vertice_qualquer()
         grau = self.grau(vertice1)
         for nome in self._vertices:
-            if not (self.grau(self._vertices[nome]) == grau):
+            if self.grau(self._vertices[nome]) != grau:
+                return False
+        return True
+
+    def eCompleto(self):
+        for vertex in self._vertices:
+            if len(self._arestas[vertex]) != ( len(self._vertices) - 1 ):
                 return False
         return True
 
@@ -68,3 +76,8 @@ class Vertice:
 
     def __init__(self, nome):
         self.nome = nome
+
+class CannotRelateToYourselfException(Exception):
+
+    def __init__(self):
+        pass
