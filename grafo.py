@@ -95,6 +95,22 @@ class Graph:
         vertices = set([self.vertices()[nome] for nome in self.vertices()])
         return vertices == self.fecho_transitivo(vertice)
 
+    def e_arvore(self):
+        return self.e_conexo and not self.contem_ciclo()
+
+    def contem_ciclo(self):
+        vertice = self.vertice_qualquer()
+        return self._ha_ciclo(vertice, vertice, set())
+
+    def _ha_ciclo(self, vertice_atual, vertice_anterior, ja_visitados):
+        if vertice_atual in ja_visitados:
+            return True
+        ja_visitados.add(vertice_atual)
+        for adjacente in self.adjacentes(vertice_atual):
+            if adjacente != vertice_anterior:
+                if self._ha_ciclo(adjacente, vertice_atual, ja_visitados):
+                    return True
+        return False
 
 class Vertice:
 

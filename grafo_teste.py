@@ -166,10 +166,9 @@ class GrafoTeste(unittest.TestCase):
         c = Vertice('c')
         d = Vertice('d')
 
-        self.grafo.adicionar_vertice(a)
-        self.grafo.adicionar_vertice(b)
-        self.grafo.adicionar_vertice(c)
-        self.grafo.adicionar_vertice(d)
+
+        for vertice in {a, b, c, d}:
+            self.grafo.adicionar_vertice(vertice)
 
         self.grafo.conectar(a, b)
         self.grafo.conectar(a, c)
@@ -185,11 +184,8 @@ class GrafoTeste(unittest.TestCase):
         d = Vertice('d')
         e = Vertice('e')
 
-        self.grafo.adicionar_vertice(a)
-        self.grafo.adicionar_vertice(b)
-        self.grafo.adicionar_vertice(c)
-        self.grafo.adicionar_vertice(d)
-        self.grafo.adicionar_vertice(e)
+        for vertice in {a, b, c, d, e}:
+            self.grafo.adicionar_vertice(vertice)
 
         self.grafo.conectar(a, b)
         self.grafo.conectar(a, c)
@@ -198,6 +194,43 @@ class GrafoTeste(unittest.TestCase):
 
         self.assertFalse(self.grafo.e_conexo())
 
+    def teste_e_arvore(self):
+        a = Vertice('a')
+        b = Vertice('b')
+        c = Vertice('c')
+        d = Vertice('d')
+        e = Vertice('e')
+        f = Vertice('f')
+
+        for vertice in {a, b, c, d, e, f}:
+            self.grafo.adicionar_vertice(vertice)
+
+        self.grafo.conectar(a, b)
+        self.grafo.conectar(a, d)
+        self.grafo.conectar(d, c)
+        self.grafo.conectar(d, f)
+        self.grafo.conectar(c, e)
+
+        self.assertTrue(self.grafo.e_arvore())
+
+    def teste_nao_e_arvore(self):
+        a = Vertice('a')
+        b = Vertice('b')
+        c = Vertice('c')
+        d = Vertice('d')
+        e = Vertice('e')
+        f = Vertice('f')
+
+        for vertice in {a, b, c, d, e, f}:
+            self.grafo.adicionar_vertice(vertice)
+
+        self.grafo.conectar(a, b)
+        self.grafo.conectar(a, c)
+        self.grafo.conectar(c, b)
+        self.grafo.conectar(c, d)
+        self.grafo.conectar(e, f)
+
+        self.assertFalse(self.grafo.e_arvore())
 
 if __name__ == '__main__':
     unittest.main()
