@@ -1,6 +1,9 @@
 
-#vertices e um dict{nome:Vertice}
-#arestas e um dict{nome vertice:set<Vertice>} que representa que existe uma aresta entre v1 e todos os vertices da lista
+# vertices e um dict{nome:Vertice}
+# arestas e um dict{nome vertice:set<Vertice>} que representa que existe
+# uma aresta entre v1 e todos os vertices da lista
+
+
 class Graph:
 
     def __init__(self):
@@ -23,17 +26,23 @@ class Graph:
 
     def conectar(self, vertice1, vertice2):
         if vertice1.nome == vertice2.nome:
-            raise CannotRelateToYourselfException()
+            raise VerticeNaoPodeSeConectarComEleMesmoException()
         adjacentes_v1 = self._arestas[vertice1.nome]
         adjacentes_v2 = self._arestas[vertice2.nome]
         adjacentes_v1.add(vertice2)
         adjacentes_v2.add(vertice1)
 
     def desconectar(self, vertice1, vertice2):
-        adjacentes_v1 = self._arestas[vertice1.nome]
-        adjacentes_v2 = self._arestas[vertice2.nome]
-        adjacentes_v1.remove(vertice2)
-        adjacentes_v2.remove(vertice1)
+        try:
+            adjacentes_v1 = self._arestas[vertice1.nome]
+            adjacentes_v2 = self._arestas[vertice2.nome]
+        except KeyError:
+            raise VerticeNaoPertenceAoGrafoException()
+        try:
+            adjacentes_v1.remove(vertice2)
+            adjacentes_v2.remove(vertice1)
+        except KeyError:
+            raise ArestaNaoExisteException()
 
     def estao_conectados(self, vertice1, vertice2):
         try:
@@ -47,8 +56,7 @@ class Graph:
         return self._vertices.copy()
 
     def vertice_qualquer(self):
-        for vertice in self._vertices:
-            return self._vertices[vertice]
+        return self._vertices[next(iter(self._vertices))]
 
     def adjacentes(self, vertice):
         return self._arestas[vertice.nome].copy()
@@ -56,7 +64,7 @@ class Graph:
     def grau(self, vertice):
         return len(self.adjacentes(vertice))
 
-    def eRegular(self):
+    def e_regular(self):
         if len(self._vertices) == 0:
             return False
         vertice1 = self.vertice_qualquer()
@@ -66,18 +74,47 @@ class Graph:
                 return False
         return True
 
-    def eCompleto(self):
+    def e_completo(self):
         for vertex in self._vertices:
-            if len(self._arestas[vertex]) != ( len(self._vertices) - 1 ):
+            if len(self._arestas[vertex]) != (len(self._vertices) - 1):
                 return False
         return True
+
+    def fecho_transitivo(self, vertice):
+        return self._procurar_fecho_transitivo(vertice, set())
+
+    def _procurar_fecho_transitivo(self, vertice, ja_visitados):
+        ja_visitados.add(vertice)
+        for adjacente in self.adjacentes(vertice):
+            if adjacente not in ja_visitados:
+                self._procurar_fecho_transitivo(adjacente, ja_visitados)
+        return ja_visitados
+
+    def e_conexo(self):
+        vertice = self.vertice_qualquer()
+        vertices = set([self.vertices()[nome] for nome in self.vertices()])
+        return vertices == self.fecho_transitivo(vertice)
+
 
 class Vertice:
 
     def __init__(self, nome):
         self.nome = nome
 
-class CannotRelateToYourselfException(Exception):
+
+class VerticeNaoPodeSeConectarComEleMesmoException(Exception):
+
+    def __init__(self):
+        pass
+
+
+class VerticeNaoPertenceAoGrafoException(Exception):
+
+    def __init__(self):
+        pass
+
+
+class ArestaNaoExisteException(Exception):
 
     def __init__(self):
         pass
