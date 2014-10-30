@@ -96,7 +96,7 @@ class Graph:
         return vertices == self.fecho_transitivo(vertice)
 
     def e_arvore(self):
-        return self.e_conexo and not self.contem_ciclo()
+        return self.e_conexo() and not self.contem_ciclo()
 
     def contem_ciclo(self):
         vertice = self.vertice_qualquer()
@@ -111,6 +111,28 @@ class Graph:
                 if self._ha_ciclo(adjacente, vertice_atual, ja_visitados):
                     return True
         return False
+
+    def numero_cromatico(self):
+        cores = []
+        for nome in self._vertices:
+            vertice = self._vertices[nome]
+            for cor in cores:
+                if len(self.adjacentes(vertice) & cor) == 0:
+                    cor.add(vertice)
+                    break
+            else:
+                cores.append(set([vertice]))
+
+        return len(cores)
+
+    def vertice_maior_grau(self):
+        vertice = self.vertice_qualquer()
+        for nome in self._vertices:
+            novo = self._vertices[nome]
+            if self.grau(novo) > self.grau(vertice):
+                vertice = novo
+        return vertice
+
 
 class Vertice:
 

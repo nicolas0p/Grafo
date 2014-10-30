@@ -232,5 +232,47 @@ class GrafoTeste(unittest.TestCase):
 
         self.assertFalse(self.grafo.e_arvore())
 
+    def teste_obter_vertice_maior_grau(self):
+        a = Vertice('a')
+        b = Vertice('b')
+        c = Vertice('c')
+        d = Vertice('d')
+
+        for vertice in {a,b,c,d}:
+            self.grafo.adicionar_vertice(vertice)
+
+        self.grafo.conectar(a, b)
+        self.grafo.conectar(a, c)
+        self.grafo.conectar(a, d)
+        self.grafo.conectar(b, d)
+
+        self.assertEqual(self.grafo.vertice_maior_grau().nome, a.nome)
+
+    def teste_colocaracao(self):
+        a = Vertice('a')
+        b = Vertice('b')
+        c = Vertice('c')
+        d = Vertice('d')
+        e = Vertice('e')
+        f = Vertice('f')
+        g = Vertice('g')
+        h = Vertice('h')
+
+        for vertice in {a, b, c, d, e, f, g, h}:
+            self.grafo.adicionar_vertice(vertice)
+
+        self.grafo.conectar(a, b)
+        self.grafo.conectar(a, h)
+        self.grafo.conectar(b, c)
+        self.grafo.conectar(b, h)
+        self.grafo.conectar(c, d)
+        self.grafo.conectar(d, e)
+        self.grafo.conectar(d, f)
+        self.grafo.conectar(e, f)
+        self.grafo.conectar(f, g)
+        self.grafo.conectar(h, d)
+
+        self.assertGreaterEqual(self.grafo.numero_cromatico(), 3)
+
 if __name__ == '__main__':
     unittest.main()
